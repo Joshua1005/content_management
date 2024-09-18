@@ -15,6 +15,7 @@ import { ReactQueryProvider } from "@/context/react-query-provider";
 import { db } from "@/lib/prisma";
 import { generateFakeProduct } from "@/faker";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toaster";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -50,7 +51,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
           <Button type="submit">Add</Button>
         </form> */}
         <ReactQueryProvider>
-          <header className="fixed inset-x-0 top-0 flex h-16 w-full items-center justify-between border-b bg-background px-4 md:px-8">
+          <header className="fixed inset-x-0 top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-background px-4 md:px-8">
             <section className="flex items-center gap-4">
               <MountainIcon className="size-7" />
               <div className="block w-[100px] md:hidden"></div>
@@ -83,7 +84,8 @@ const RootLayout = ({ children }: RootLayoutProps) => {
               </div>
             </section>
           </header>
-          <main className="min-h-screen px-4 pt-16 md:px-8">{children}</main>
+          <main className="min-h-screen px-4 py-16 md:px-8">{children}</main>
+          <Toaster />
         </ReactQueryProvider>
       </body>
     </html>

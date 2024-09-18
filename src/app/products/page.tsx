@@ -14,7 +14,13 @@ import { ProductsTable } from "@/components/products/products-table";
 import { ProductsPagination } from "@/components/products/products-pagination";
 import { productsColumnDef } from "@/components/products/products-columnsDef";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { CirclePlusIcon, FilterIcon, FolderUpIcon } from "lucide-react";
+import {
+  CirclePlusIcon,
+  DatabaseIcon,
+  FilterIcon,
+  FolderUpIcon,
+  LockIcon,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -24,6 +30,40 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { EndpointCard } from "@/components/endpoint-card";
+
+const productsAPIEndPoint: APIEndpoint[] = [
+  {
+    method: "GET",
+    path: "/api/products",
+    description: "Retrieve all products",
+    access: "public",
+  },
+  {
+    method: "POST",
+    path: "/api/products",
+    description: "Create a new product",
+    access: "admin",
+  },
+  {
+    method: "GET",
+    path: "/api/products/:id",
+    description: "Retrieve a specific product",
+    access: "public",
+  },
+  {
+    method: "PUT",
+    path: "/api/products/:id",
+    description: "Update a product",
+    access: "admin",
+  },
+  {
+    method: "DELETE",
+    path: "/api/products/:id",
+    description: "Delete a product",
+    access: "admin",
+  },
+];
 
 const ProductsPage = () => {
   const products = useProducts();
@@ -137,9 +177,20 @@ const ProductsPage = () => {
       <div className="container mx-auto mt-4 md:mt-8">
         <Card>
           <CardHeader>
-            <CardTitle>API</CardTitle>
+            <CardTitle>Products API Endpoints</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+            <div className="space-y-8">
+              {productsAPIEndPoint.map((endpoint) => {
+                return (
+                  <EndpointCard
+                    key={endpoint.description}
+                    {...endpoint}
+                  ></EndpointCard>
+                );
+              })}
+            </div>
+          </CardContent>
         </Card>
       </div>
     </>
