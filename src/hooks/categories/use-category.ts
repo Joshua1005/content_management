@@ -5,15 +5,15 @@ import { Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
 const useCategory = ({
-  id,
+  name,
   query,
 }: {
-  id?: number;
+  name?: string;
   query?: Prisma.CategoryFindFirstArgs;
 }) => {
   const category = useQuery({
-    queryKey: ["categories", id ? id : query?.where],
-    queryFn: async () => await getCategory({ id, query }),
+    queryKey: ["categories", name ? name : query?.where],
+    queryFn: async () => await getCategory({ name, query }),
   });
 
   return category;

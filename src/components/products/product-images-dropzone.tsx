@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useImagesDropzone } from "@/hooks/dropzone/use-images-dropzone";
 import {
   Dropzone,
   DropzoneContent,
@@ -8,8 +10,6 @@ import {
   DropzoneInput,
   DropzoneTitle,
 } from "@/components/ui/dropzone";
-import { useImagesDropzone } from "@/hooks/dropzone/use-images-dropzone";
-import { cn } from "@/lib/utils";
 
 interface ProductKeywordCardProps
   extends ReturnType<typeof useImagesDropzone> {}

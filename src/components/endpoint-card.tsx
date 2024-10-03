@@ -1,24 +1,22 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   ClipboardIcon,
-  EllipsisIcon,
   GlobeIcon,
   LockIcon,
 } from "lucide-react";
-import { Badge } from "./ui/badge";
-import { cn } from "@/lib/utils";
-
-import { Button } from "./ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./ui/collapsible";
-import React, { useState } from "react";
+} from "@/components/ui/collapsible";
 
 const methodColors = {
   GET: "bg-blue-500",

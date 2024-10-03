@@ -1,9 +1,9 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { backendClient } from "@/app/api/edgestore/[...edgestore]/core";
 import { db } from "@/lib/prisma";
 import zodSchema from "@/lib/zod";
-import { Prisma, Product } from "@prisma/client";
 
 const getProducts = async (query?: Prisma.ProductFindManyArgs) => {
   try {

@@ -1,15 +1,14 @@
+import { cn } from "@/lib/utils";
 import { MountainIcon, SearchIcon } from "lucide-react";
-import React from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from "./ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import { Input } from "./ui/input";
-import { AvatarImage, Avatar, AvatarFallback } from "./ui/avatar";
+} from "@/components/ui/navigation-menu";
+import { Input } from "@/components/ui/input";
+import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const links = [
   { href: "/", label: "Dashboard" },

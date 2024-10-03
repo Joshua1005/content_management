@@ -1,9 +1,9 @@
 "use client";
 
-import { CircleXIcon } from "lucide-react";
-import { Card, CardContent } from "../ui/card";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { CircleXIcon } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface ProductKeywordCardProps extends React.HTMLAttributes<HTMLDivElement> {
   keyword: string;

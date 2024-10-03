@@ -1,9 +1,16 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import dayjs from "dayjs";
 import { Product } from "@prisma/client";
 import { createColumnHelper } from "@tanstack/react-table";
-import dayjs from "dayjs";
-import Image from "next/image";
+import { useDeleteProduct } from "@/hooks/products/use-delete-product";
+import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { useCategories } from "@/hooks/categories/use-categories";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ChevronsUpDownIcon,
   CopyIcon,
@@ -23,13 +30,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useDeleteProduct } from "@/hooks/products/use-delete-product";
-import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
-import { useCategories } from "@/hooks/categories/use-categories";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 const columnHelper = createColumnHelper<Product>();
 

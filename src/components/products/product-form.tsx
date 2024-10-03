@@ -1,5 +1,11 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAddProductForm } from "@/hooks/products/use-add-product-form";
+import { useAddProduct } from "@/hooks/products/use-add-product";
+import { useImagesDropzone } from "@/hooks/dropzone/use-images-dropzone";
+import { useImageDropzone } from "@/hooks/dropzone/use-image-dropzone";
 import {
   Form,
   FormControl,
@@ -14,17 +20,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
-import { cn } from "@/lib/utils";
-
-import { useAddProductForm } from "@/hooks/products/use-add-product-form";
-import { useAddProduct } from "@/hooks/products/use-add-product";
-import { useImagesDropzone } from "@/hooks/dropzone/use-images-dropzone";
-import { useImageDropzone } from "@/hooks/dropzone/use-image-dropzone";
-import { useQueryClient } from "@tanstack/react-query";
-import { ProductKeywordCard } from "./product-keyword-card";
-import { ProductThumbnailDropzone } from "./product-thumbnail-dropzone";
-import { ProductImagesDropzone } from "./product-images-dropzone";
+import { ProductKeywordCard } from "@/components/products/product-keyword-card";
+import { ProductThumbnailDropzone } from "@/components/products/product-thumbnail-dropzone";
+import { ProductImagesDropzone } from "@/components/products/product-images-dropzone";
 
 const ProductForm = () => {
   const queryClient = useQueryClient();

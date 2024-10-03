@@ -1,3 +1,5 @@
+import { Product } from "@prisma/client";
+import { flexRender, HeaderGroup, RowModel } from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -6,9 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { Product } from "@prisma/client";
-import { flexRender, HeaderGroup, RowModel } from "@tanstack/react-table";
 
 interface ProductsTableProps {
   headerGroups: HeaderGroup<Product>[];

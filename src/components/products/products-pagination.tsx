@@ -1,5 +1,7 @@
 "use client";
 
+import { PaginationState, Updater } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
 import {
   Pagination,
   PaginationContent,
@@ -13,8 +15,6 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
-import { PaginationState, Updater } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
 
 interface ProductsPaginationProps {
   pagination: PaginationState;

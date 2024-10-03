@@ -16,16 +16,16 @@ const getCategories = async (query?: Prisma.CategoryFindManyArgs) => {
 };
 
 const getCategory = async ({
-  id,
+  name,
   query,
 }: {
-  id?: number;
+  name?: string;
   query?: Prisma.CategoryFindFirstArgs;
 }) => {
   try {
     const category = query
       ? await db.category.findFirst({ ...query })
-      : await db.category.findUnique({ where: { id } });
+      : await db.category.findUnique({ where: { name } });
 
     return category;
   } catch (error) {

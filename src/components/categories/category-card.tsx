@@ -1,11 +1,11 @@
 "use client";
 
-import { Category } from "@prisma/client";
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
-import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
+import { Category } from "@prisma/client";
 import { useProduct } from "@/hooks/products/use-product";
+import { ArrowRightIcon } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 
 interface CategoryCardProps extends Category {}
 

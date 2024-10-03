@@ -1,5 +1,10 @@
 "use client";
 
+import { CirclePlusIcon, FilterIcon, FolderUpIcon } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useProducts } from "@/hooks/products/use-products";
+import { useProductTable } from "@/hooks/products/use-product-table";
 import {
   Card,
   CardContent,
@@ -8,12 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useProductTable } from "@/hooks/products/use-product-table";
-import { useProducts } from "@/hooks/products/use-products";
 import { ProductsTable } from "@/components/products/products-table";
 import { ProductsPagination } from "@/components/products/products-pagination";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { CirclePlusIcon, FilterIcon, FolderUpIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -21,13 +23,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { EndpointCard } from "@/components/endpoint-card";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCategory } from "@/hooks/categories/use-category";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { productsColumnDef } from "@/components/products/products-columns-def";
 
 const productsAPIEndPoint: APIEndpoint[] = [
@@ -69,7 +65,7 @@ const productsAPIEndPoint: APIEndpoint[] = [
 ];
 
 const ProductsPage = () => {
-  const products = useProducts(undefined);
+  const products = useProducts();
   const table = useProductTable({
     data: products.data ?? [],
     columns: productsColumnDef,

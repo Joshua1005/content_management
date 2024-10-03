@@ -2,11 +2,7 @@
 
 import { getProduct } from "@/actions/products";
 import { Prisma, Product } from "@prisma/client";
-import {
-  useQuery,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 
 const useProduct = ({
   id,
