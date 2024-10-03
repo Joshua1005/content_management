@@ -19,6 +19,7 @@ const generateFakeProduct = (): Omit<Product, "id"> => {
     ),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
+    categoryId: faker.number.int({ min: 1, max: 6 }),
   };
 };
 

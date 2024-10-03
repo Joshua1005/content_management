@@ -8,5 +8,6 @@ declare global {
     path: string;
     description: string;
     access: "public" | "admin";
+    example: string;
   }
 }

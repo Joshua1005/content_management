@@ -13,7 +13,6 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
 import { PaginationState, Updater } from "@tanstack/react-table";
 import { cn } from "@/lib/utils";
 

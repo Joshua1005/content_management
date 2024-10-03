@@ -1,12 +1,13 @@
 "use client";
 
 import { getProducts } from "@/actions/products";
+import { Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-const useProducts = () => {
+const useProducts = (query?: Prisma.ProductFindManyArgs) => {
   const products = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => await getProducts(),
+    queryKey: query ? ["products", query.where] : ["products"],
+    queryFn: async () => await getProducts(query),
   });
 
   return products;

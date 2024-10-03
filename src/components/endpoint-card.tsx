@@ -1,8 +1,10 @@
 "use client";
+
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   ClipboardIcon,
+  EllipsisIcon,
   GlobeIcon,
   LockIcon,
 } from "lucide-react";
@@ -33,52 +35,72 @@ const EndpointCard = ({
   path,
   description,
   access,
+  example,
 }: EndpointCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   return (
-    <div className="flex items-center justify-between gap-8 rounded-md border p-6">
+    <div className="flex items-center justify-between gap-4 rounded-md border p-6 md:gap-8">
       <div>
         <Badge className={cn(methodColors[method])}>{method}</Badge>
       </div>
       <div className="flex-1">
-        <div className="flex items-center gap-2">
-          <h3 className="text-sm">{path}</h3>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(path);
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm">{path}</h3>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(path);
 
-              toast({
-                title: "Copied to Clipboard!",
-                description:
-                  "The path has been successfully copied. You can now paste it where needed.",
-              });
-            }}
-            size="icon"
-            variant="ghost"
-          >
-            <ClipboardIcon className="size-3" />
-          </Button>
-        </div>
-        <p className="text-xs text-muted-foreground">{description}</p>
-        <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-4">
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="text-xs">
-              <span>{isOpen ? "Hide" : "Show"} Example</span>
-              {isOpen ? (
-                <ChevronUpIcon className="size-4" />
-              ) : (
-                <ChevronDownIcon className="size-4" />
-              )}
+                toast({
+                  title: "Copied to Clipboard!",
+                  description:
+                    "The path has been successfully copied. You can now paste it where needed.",
+                });
+              }}
+              size="icon"
+              variant="ghost"
+            >
+              <ClipboardIcon className="size-3" />
             </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2">
-            <pre className="rounded-md bg-muted p-4">
-              <code className="text-sm"></code>
-            </pre>
-          </CollapsibleContent>
-        </Collapsible>
+          </div>
+          <p className="text-xs text-muted-foreground">{description}</p>
+          <Collapsible open={isOpen} onOpenChange={setIsOpen} className="mt-4">
+            <CollapsibleTrigger asChild>
+              <Button variant="ghost" className="text-xs">
+                <span>{isOpen ? "Hide" : "Show"} Example</span>
+                {isOpen ? (
+                  <ChevronUpIcon className="size-4" />
+                ) : (
+                  <ChevronDownIcon className="size-4" />
+                )}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2">
+              <pre className="rounded-md bg-muted p-4">
+                <div className="flex justify-between">
+                  <code className="text-sm">{example}</code>
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(example);
+
+                      toast({
+                        title: "Copied to Clipboard!",
+                        description:
+                          "The code example has been successfully copied. You can now paste it where needed.",
+                      });
+                    }}
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <ClipboardIcon className="size-4" />
+                  </Button>
+                </div>
+              </pre>
+            </CollapsibleContent>
+          </Collapsible>
+        </div>
       </div>
       <div>
         <Badge variant={access === "public" ? "secondary" : "destructive"}>

@@ -8,12 +8,14 @@ datasource db {
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String   @db.Text
-  thumbnail   String
-  images      String[]
-  priceCents  Int      @map("price_cents")
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String   @db.Text
+  thumbnail    String
+  images       String[]
+  priceCents   Int      @map("price_cents")
+  category     Category @relation(fields: [categoryName], references: [name])
+  categoryName String   @map("category_name")
 
   stocks  Int     @default(0)
   onStock Boolean @default(false) @map("on_stock")
@@ -22,4 +24,15 @@ model Product {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Category {
+  name String @id @unique
+
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("categories")
 }

@@ -17,10 +17,18 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useDeleteProduct } from "@/hooks/products/use-delete-product";
+import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { useCategory } from "@/hooks/categories/use-category";
+import { useCategories } from "@/hooks/categories/use-categories";
+import { useEffect, useState } from "react";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -36,7 +44,7 @@ const productsColumnDef = [
           alt={info.row.original.name}
           width={60}
           height={60}
-          className="aspect-square rounded-md object-contain"
+          className="aspect-square rounded-md object-cover"
         />
       );
     },
@@ -49,19 +57,72 @@ const productsColumnDef = [
       return <span className="font-semibold">{info.getValue()}</span>;
     },
   }),
+  columnHelper.accessor("categoryId", {
+    id: "categoryId",
+    header: ({ table }) => {
+      const [selectedCategoryId, setSelectedCategoryId] = useState("");
+      const categories = useCategories();
+
+      useEffect(
+        () =>
+          table.setColumnFilters([
+            { id: "categoryId", value: selectedCategoryId },
+          ]),
+        [selectedCategoryId],
+      );
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"ghost"} className="-ml-4">
+              Category
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuRadioGroup
+              value={selectedCategoryId}
+              onValueChange={(e) => setSelectedCategoryId(e)}
+            >
+              {categories.data?.map((category) => (
+                <DropdownMenuRadioItem
+                  key={category.id}
+                  value={`${category.id}`}
+                >
+                  {category.name}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    cell: (info) => {
+      const categoryId = info.row.original.categoryId;
+
+      const category = useCategory({ id: categoryId });
+
+      return <span>{category.data?.name}</span>;
+    },
+    enableColumnFilter: true,
+    filterFn: ({ original }, id, categoryId) => {
+      if (original.categoryId === parseInt(categoryId)) return true;
+
+      return false;
+    },
+  }),
   columnHelper.accessor("description", {
     header: () => {
       return <span>Description</span>;
     },
     cell: (info) => {
-      return <span className="text-xs">{info.getValue()}</span>;
+      return <span className="line-clamp-2 text-xs">{info.getValue()}</span>;
     },
   }),
   columnHelper.accessor("stocks", {
     header: (info) => {
       return (
         <Button
-          className="gap-4"
+          className="-ml-4 gap-4"
           variant="ghost"
           onClick={() => {
             info.column.toggleSorting(info.column.getIsSorted() === "asc");
@@ -80,7 +141,7 @@ const productsColumnDef = [
     header: (info) => {
       return (
         <Button
-          className="gap-4"
+          className="-ml-4 gap-4"
           variant="ghost"
           onClick={() => {
             info.column.toggleSorting(info.column.getIsSorted() === "asc");
@@ -104,7 +165,7 @@ const productsColumnDef = [
     cell: (info) => {
       const dateFormat = dayjs(info.getValue()).format("MMMM DD, YYYY");
 
-      return <span>{dateFormat}</span>;
+      return <span className="line-clamp-1">{dateFormat}</span>;
     },
   }),
   columnHelper.display({
@@ -112,7 +173,15 @@ const productsColumnDef = [
     header: () => {
       return <span></span>;
     },
-    cell: () => {
+    cell: (info) => {
+      const queryClient = useQueryClient();
+      const { toast } = useToast();
+      const { mutate } = useDeleteProduct({
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["products"] });
+        },
+      });
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -120,7 +189,18 @@ const productsColumnDef = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem className="gap-2">
+            <DropdownMenuItem
+              className="gap-2"
+              onClick={() => {
+                navigator.clipboard.writeText(info.row.original.id.toString());
+
+                toast({
+                  title: "Copied to Clipboard!",
+                  description:
+                    "The ID has been successfully copied. You can now paste it where needed.",
+                });
+              }}
+            >
               <CopyIcon className="size-4" />
               <span className="font-medium">Copy ID to clipboard</span>
             </DropdownMenuItem>
@@ -130,7 +210,18 @@ const productsColumnDef = [
                 <EditIcon className="size-4" />
                 <span className="font-medium">Edit</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2">
+              <DropdownMenuItem
+                className="gap-2"
+                onClick={() => {
+                  mutate(info.row.original.id);
+                  toast({
+                    title: "Product deleted!",
+                    description:
+                      "You have been successfully deleted the product.",
+                    variant: "destructive",
+                  });
+                }}
+              >
                 <Trash2Icon className="size-4" />
                 <span className="font-medium">Delete</span>
               </DropdownMenuItem>

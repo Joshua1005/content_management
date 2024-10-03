@@ -12,15 +12,8 @@ import { useProductTable } from "@/hooks/products/use-product-table";
 import { useProducts } from "@/hooks/products/use-products";
 import { ProductsTable } from "@/components/products/products-table";
 import { ProductsPagination } from "@/components/products/products-pagination";
-import { productsColumnDef } from "@/components/products/products-columnsDef";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  CirclePlusIcon,
-  DatabaseIcon,
-  FilterIcon,
-  FolderUpIcon,
-  LockIcon,
-} from "lucide-react";
+import { CirclePlusIcon, FilterIcon, FolderUpIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -31,6 +24,10 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { EndpointCard } from "@/components/endpoint-card";
+import { productsColumnDef } from "@/components/products/products-columnsDef";
+import { useSearchParams } from "next/navigation";
+import { useCategory } from "@/hooks/categories/use-category";
+import { useEffect } from "react";
 
 const productsAPIEndPoint: APIEndpoint[] = [
   {
@@ -38,34 +35,39 @@ const productsAPIEndPoint: APIEndpoint[] = [
     path: "/api/products",
     description: "Retrieve all products",
     access: "public",
+    example: `fetch(/api/products)\n\t.then((res) => res.json())\n\t.then((data) => console.log(data))\n\t.catch((error) => console.error(error));`,
   },
   {
     method: "POST",
     path: "/api/products",
     description: "Create a new product",
     access: "admin",
+    example: `fetch("/api/products", { method: "POST", body: JSON.stringify({ ...product })})\n\t.then((response) => response.json())\n\t.then((data) => console.log(data))\n\t.catch((error) => console.error(error));`,
   },
   {
     method: "GET",
     path: "/api/products/:id",
     description: "Retrieve a specific product",
     access: "public",
+    example: `fetch("/api/products/1")\n\t.then((response) => response.json())\n\t.then((data) => console.log(data))\n\t.catch((error) => console.error(error));`,
   },
   {
     method: "PUT",
     path: "/api/products/:id",
     description: "Update a product",
     access: "admin",
+    example: `fetch("/api/products/1", { method: "PUT", body: JSON.stringify({ ...product, price: newPrice })})\n\t.then((response) => response.json())\n\t.then((data) => console.log(data))\n\t.catch((error) => console.error(error));`,
   },
   {
     method: "DELETE",
     path: "/api/products/:id",
     description: "Delete a product",
     access: "admin",
+    example: `fetch(/api/products, { method: "DELETE" })\n\t.then((res) => res.json())\n\t.then((data) => console.log(data))\n\t.catch((error) => console.error(error));`,
   },
 ];
 
-const ProductsPage = () => {
+const ProductsPage = ({ ...props }) => {
   const products = useProducts();
   const table = useProductTable({
     data: products.data || [],
@@ -144,9 +146,9 @@ const ProductsPage = () => {
               <ProductsTable headerGroups={headerGroups} rowModel={rowModel} />
             </CardContent>
             <CardFooter>
-              <p className="text-xs text-muted-foreground md:block">
+              <p className="text-nowrap text-xs text-muted-foreground md:block">
                 Showing{" "}
-                <span className="font-bold">
+                <strong>
                   {rowCount
                     ? pagination.pageSize * pagination.pageIndex + 1
                     : 0}{" "}
@@ -155,9 +157,10 @@ const ProductsPage = () => {
                     pagination.pageSize * (pagination.pageIndex + 1),
                     rowCount,
                   )}{" "}
-                </span>
+                </strong>
                 of
-                <span className="font-bold"> {rowCount} products.</span>
+                <strong> {rowCount} </strong>
+                products.
               </p>
               <ProductsPagination
                 pageCount={pageCount}
@@ -180,13 +183,10 @@ const ProductsPage = () => {
             <CardTitle>Products API Endpoints</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-8">
+            <div className="space-y-4 md:space-y-8">
               {productsAPIEndPoint.map((endpoint) => {
                 return (
-                  <EndpointCard
-                    key={endpoint.description}
-                    {...endpoint}
-                  ></EndpointCard>
+                  <EndpointCard key={endpoint.description} {...endpoint} />
                 );
               })}
             </div>
