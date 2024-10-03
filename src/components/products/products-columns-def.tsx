@@ -26,9 +26,10 @@ import { Button } from "@/components/ui/button";
 import { useDeleteProduct } from "@/hooks/products/use-delete-product";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { useCategory } from "@/hooks/categories/use-category";
 import { useCategories } from "@/hooks/categories/use-categories";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -57,19 +58,42 @@ const productsColumnDef = [
       return <span className="font-semibold">{info.getValue()}</span>;
     },
   }),
-  columnHelper.accessor("categoryId", {
-    id: "categoryId",
+  columnHelper.accessor("categoryName", {
     header: ({ table }) => {
-      const [selectedCategoryId, setSelectedCategoryId] = useState("");
+      const [selectedCategory, setSelectedCategory] = useState("");
+      const router = useRouter();
+      const pathname = usePathname();
+      const searchParams = useSearchParams();
       const categories = useCategories();
+      const searchCategory = searchParams.get("category");
 
-      useEffect(
-        () =>
-          table.setColumnFilters([
-            { id: "categoryId", value: selectedCategoryId },
-          ]),
-        [selectedCategoryId],
-      );
+      useEffect(() => {
+        if (searchCategory) setSelectedCategory(searchCategory);
+      }, [searchCategory]);
+
+      useEffect(() => {
+        table.setColumnFilters([
+          { id: "categoryName", value: selectedCategory },
+        ]);
+      }, [selectedCategory]);
+
+      const handleValueChange = (e: string) => {
+        const category = e === selectedCategory ? "" : e;
+        setSelectedCategory(category);
+
+        const currentParams = new URLSearchParams(searchParams);
+
+        if (category) {
+          currentParams.set("category", category);
+        } else {
+          currentParams.delete("category");
+        }
+
+        const search = currentParams.toString();
+        const query = search ? `?${search}` : "";
+
+        router.replace(`${pathname}${query}`);
+      };
 
       return (
         <DropdownMenu>
@@ -80,13 +104,13 @@ const productsColumnDef = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuRadioGroup
-              value={selectedCategoryId}
-              onValueChange={(e) => setSelectedCategoryId(e)}
+              value={selectedCategory}
+              onValueChange={handleValueChange}
             >
               {categories.data?.map((category) => (
                 <DropdownMenuRadioItem
-                  key={category.id}
-                  value={`${category.id}`}
+                  key={category.name}
+                  value={category.name.toLowerCase()}
                 >
                   {category.name}
                 </DropdownMenuRadioItem>
@@ -97,17 +121,7 @@ const productsColumnDef = [
       );
     },
     cell: (info) => {
-      const categoryId = info.row.original.categoryId;
-
-      const category = useCategory({ id: categoryId });
-
-      return <span>{category.data?.name}</span>;
-    },
-    enableColumnFilter: true,
-    filterFn: ({ original }, id, categoryId) => {
-      if (original.categoryId === parseInt(categoryId)) return true;
-
-      return false;
+      return <span>{info.getValue()}</span>;
     },
   }),
   columnHelper.accessor("description", {
@@ -119,13 +133,35 @@ const productsColumnDef = [
     },
   }),
   columnHelper.accessor("stocks", {
-    header: (info) => {
+    header: ({ column }) => {
+      const router = useRouter();
+      const searchParams = useSearchParams();
+      const pathname = usePathname();
+      const isSorted = column.getIsSorted();
+
+      useEffect(() => {
+        const currentParams = new URLSearchParams(searchParams);
+
+        if (isSorted) {
+          currentParams.set("sort", column.id);
+          currentParams.set("order", isSorted === "asc" ? "asc" : "desc");
+        } else {
+          currentParams.delete("sort");
+          currentParams.delete("order");
+        }
+
+        const search = currentParams.toString();
+        const query = search ? `?${search}` : "";
+
+        router.replace(`${pathname}${query}`);
+      }, [isSorted]);
+
       return (
         <Button
           className="-ml-4 gap-4"
           variant="ghost"
           onClick={() => {
-            info.column.toggleSorting(info.column.getIsSorted() === "asc");
+            column.toggleSorting(isSorted === "asc");
           }}
         >
           Stocks
@@ -138,13 +174,35 @@ const productsColumnDef = [
     },
   }),
   columnHelper.accessor("priceCents", {
-    header: (info) => {
+    header: ({ column }) => {
+      const router = useRouter();
+      const searchParams = useSearchParams();
+      const pathname = usePathname();
+      const isSorted = column.getIsSorted();
+
+      useEffect(() => {
+        const currentParams = new URLSearchParams(searchParams);
+
+        if (isSorted) {
+          currentParams.set("sort", column.id);
+          currentParams.set("order", isSorted === "asc" ? "asc" : "desc");
+        } else {
+          currentParams.delete("sort");
+          currentParams.delete("order");
+        }
+
+        const search = currentParams.toString();
+        const query = search ? `?${search}` : "";
+
+        router.replace(`${pathname}${query}`);
+      }, [isSorted]);
+
       return (
         <Button
           className="-ml-4 gap-4"
           variant="ghost"
           onClick={() => {
-            info.column.toggleSorting(info.column.getIsSorted() === "asc");
+            column.toggleSorting(column.getIsSorted() === "asc");
           }}
         >
           Price
@@ -206,9 +264,11 @@ const productsColumnDef = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-2">
-                <EditIcon className="size-4" />
-                <span className="font-medium">Edit</span>
+              <DropdownMenuItem className="gap-2" asChild>
+                <Link href={`/products/edit/${info.row.original.id}`}>
+                  <EditIcon className="size-4" />
+                  <span className="font-medium">Edit</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="gap-2"

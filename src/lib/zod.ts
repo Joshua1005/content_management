@@ -1,5 +1,5 @@
+import { getCategories } from "@/actions/categories";
 import { z } from "zod";
-import { db } from "./prisma";
 
 const zodSchema = {
   product: z.object({
@@ -19,7 +19,12 @@ const zodSchema = {
       .or(z.number()),
     keywords: z.array(z.string()),
     images: z.array(z.string()),
-    categoryId: z.number(),
+    categoryName: z.string().refine(async (categoryName) => {
+      const categories = await getCategories();
+      const categoryNames = categories.map((category) => category.name);
+
+      return categoryNames.includes(categoryName);
+    }),
   }),
 };
 

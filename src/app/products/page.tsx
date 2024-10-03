@@ -24,10 +24,11 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { EndpointCard } from "@/components/endpoint-card";
-import { productsColumnDef } from "@/components/products/products-columnsDef";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCategory } from "@/hooks/categories/use-category";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { productsColumnDef } from "@/components/products/products-columns-def";
 
 const productsAPIEndPoint: APIEndpoint[] = [
   {
@@ -67,10 +68,10 @@ const productsAPIEndPoint: APIEndpoint[] = [
   },
 ];
 
-const ProductsPage = ({ ...props }) => {
-  const products = useProducts();
+const ProductsPage = () => {
+  const products = useProducts(undefined);
   const table = useProductTable({
-    data: products.data || [],
+    data: products.data ?? [],
     columns: productsColumnDef,
   });
   const { pagination } = table.getState();

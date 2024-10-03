@@ -36,7 +36,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
                         { length: 100 },
                         async () =>
                           await db.product.create({
-                            data: { ...generateFakeProduct() },
+                            data: { ...(await generateFakeProduct()) },
                           }),
                       ),
                     ]);

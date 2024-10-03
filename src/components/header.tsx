@@ -8,8 +8,8 @@ import {
   navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { Input } from "./ui/input";
+import { AvatarImage, Avatar, AvatarFallback } from "./ui/avatar";
 
 const links = [
   { href: "/", label: "Dashboard" },
@@ -50,6 +50,7 @@ const Header = () => {
         </div>
         <div>
           <Avatar>
+            <AvatarImage src="placeholder.svg" />
             <AvatarFallback>J</AvatarFallback>
           </Avatar>
         </div>

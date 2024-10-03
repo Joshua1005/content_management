@@ -14,7 +14,7 @@ const CategoriesPage = () => {
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {categories?.data?.map((category) => (
-            <CategoryCard key={category.id} {...category} />
+            <CategoryCard key={category.name} {...category} />
           ))}
         </div>
       </div>

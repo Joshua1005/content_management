@@ -9,9 +9,7 @@ interface EditProductPageProps {
 
 const EditProductPage = ({ params }: EditProductPageProps) => {
   const { productId } = params;
-
   const id = parseInt(productId[0]);
-
   const product = useProduct({ id });
 
   if (!product.data) return <div>Product not found.</div>;

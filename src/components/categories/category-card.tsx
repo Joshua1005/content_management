@@ -9,13 +9,8 @@ import { useProduct } from "@/hooks/products/use-product";
 
 interface CategoryCardProps extends Category {}
 
-const CategoryCard = ({
-  name,
-  id,
-  createdAt,
-  updatedAt,
-}: CategoryCardProps) => {
-  const product = useProduct({ query: { where: { categoryId: id } } });
+const CategoryCard = ({ name }: CategoryCardProps) => {
+  const product = useProduct({ query: { where: { categoryName: name } } });
 
   return (
     <div className="overflow-hidden rounded-lg bg-background shadow-sm">
@@ -31,8 +26,7 @@ const CategoryCard = ({
         <h3 className="mb-2 text-lg font-semibold">{name}</h3>
         <Link
           className={buttonVariants({ variant: "outline", className: "gap-2" })}
-          prefetch={false}
-          href={`products?categories=${name.toLowerCase()}`}
+          href={`products?category=${name.toLowerCase()}`}
         >
           View Products
           <ArrowRightIcon className="h-4 w-4" />

@@ -1,8 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { Product } from "@prisma/client";
+import { getCategories } from "./actions/categories";
 
-const generateFakeProduct = (): Omit<Product, "id"> => {
+const generateFakeProduct = async (): Promise<Omit<Product, "id">> => {
   const stocks = faker.number.int({ min: 0, max: 100 });
+  const categories = await getCategories();
+  const categoryNames = categories.map((category) => category.name);
 
   return {
     name: faker.commerce.productName(),
@@ -19,7 +22,7 @@ const generateFakeProduct = (): Omit<Product, "id"> => {
     ),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-    categoryId: faker.number.int({ min: 1, max: 6 }),
+    categoryName: categoryNames[Math.floor(Math.random() * categories.length)],
   };
 };
 
